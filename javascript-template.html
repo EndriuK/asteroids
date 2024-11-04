@@ -12,6 +12,7 @@
     <script>
         const FPS = 30;  // frame per second
         const SHIP_SIZE = 30; // ship height in pixels
+        const TURN_SPEED = 360 // turn speed in degrees per seconds
 
 
         /** @type {HTMLCanvasElement} */
@@ -22,12 +23,45 @@
             x: canv.width / 2,
             y: canv.width / 2,
             r: SHIP_SIZE / 2,
-            a: 90 / 180 * Math.PI // convert to randians
+            a: 90 / 180 * Math.PI, // convert to randians
+            rot: 0
 
         }
 
+        // set up event handlers
+        document.addEventListener("keydown", keyDown);
+        document.addEventListener("keyup", keyUp);
+
         // set up game loop
         setInterval(update, 1000 / FPS);
+
+        function keyDown(/** @type {keyboardEvent} */ ev) {
+            switch (ev.keyCode) {
+                case 37: // left arrow (rotate ship left)
+                    ship.rot = TURN_SPEED / 180 * Math.PI / FPS;
+                    break;
+                case 38:  // up arrow (thrust the ship forward)
+
+                    break;
+                case 39:  // right arrow (rotate ship right)
+                    ship.rot = -TURN_SPEED / 180 * Math.PI / FPS;
+                    break;
+            }
+        }
+
+        function keyUp(/** @type {keyboardEvent} */ ev) {
+            switch (ev.keyCode) {
+                case 37: // left arrow (stop rotating left)
+                    ship.rot = 0;
+                    break;
+                case 38:  // up arrow (stop thrusting)
+
+                    break;
+                case 39:  // right arrow (stop rotating right)
+                    ship.rot = 0;
+                    break;
+            }
+        }
 
         function update() {
             // draw space
@@ -53,8 +87,10 @@
             );
             ctx.closePath()
             ctx.stroke();
-            // rotate ship
 
+
+            // rotate ship
+            ship.a += ship.rot;
 
             // move the ship
 
