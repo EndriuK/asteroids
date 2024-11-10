@@ -29,7 +29,7 @@
         // set up the spaceship object
         var ship = {
             x: canv.width / 2,
-            y: canv.width / 2,
+            y: canv.height / 2,
             r: SHIP_SIZE / 2,
             a: 90 / 180 * Math.PI, // convert to randians
             rot: 0,
@@ -56,10 +56,16 @@
             roids = [];
             var x, y;
             for (var i = 0; i < ROIDS_NUM; i++) {
-                x = Math.floor(Math.random() * canv.width);
-                y = Math.floor(Math.random() * canv.height);
+                do {
+                    x = Math.floor(Math.random() * canv.width);
+                    y = Math.floor(Math.random() * canv.height);
+                } while (distBetweenPoints(ship.x, ship.y, x, y) < ROIDS_SIZE * 2 + ship.r);
                 roids.push(newAsteroid(x, y));
             }
+        }
+
+        function distBetweenPoints(x1, y1, x2, y2) {
+            return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
         }
 
         function keyDown(/** @type {keyboardEvent} */ ev) {
