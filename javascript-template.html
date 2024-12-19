@@ -208,7 +208,17 @@
 
 
                 // handle edge of screen
+            } if (roids[i].x < 0 - roids[i].r) {
+                roids[i].x = canv.width + roids[i].r;
+            } else if (roids[i].x > canv.width + roids[i].r) {
+                roids[i].x = 0 - roids[i].r;
             }
+            if (roids[i].y < 0 - roids[i].r) {
+                roids[i].y = canv.height + roids[i].r;
+            } else if (roids[i].y > canv.height + roids[i].r) {
+                roids[i].y = 0 - roids[i].r;
+            }
+
 
             // rotate ship
             ship.a += ship.rot;
