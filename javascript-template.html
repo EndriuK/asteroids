@@ -20,7 +20,7 @@
         const ROIDS_SPD = 50; // max starting speed of asteroids in pixels per second
         const ROIDS_VERT = 10; // averge number of vertices on each asteroid
         const ROIDS_JAG = 0.4; // jaggedness of the asteroids (0 = none, 1 = lots)
-        const SHOW_BOUNDING = true; // show or hide collision bounding
+        const SHOW_BOUNDING = false; // show or hide collision bounding
         const SHIP_EXPLODE_DUR = 0.3; // duration of the ship's explosion
 
 
@@ -188,21 +188,25 @@
                 }
             } else {
                 // draw the explosion
+                ctx.fillStyle = "darkred";
+                ctx.beginPath();
+                ctx.arc(ship.x, ship.y, ship.r * 1.7, 0, Math.PI * 2, false);
+                ctx.fill();
                 ctx.fillStyle = "red";
                 ctx.beginPath();
-                ctx.arc(ship.x, ship.y, ship.r * 1.5, 0, Math.PI * 2, false);
+                ctx.arc(ship.x, ship.y, ship.r * 1.4, 0, Math.PI * 2, false);
                 ctx.fill();
                 ctx.fillStyle = "orange";
                 ctx.beginPath();
-                ctx.arc(ship.x, ship.y, ship.r * 1.2, 0, Math.PI * 2, false);
+                ctx.arc(ship.x, ship.y, ship.r * 1.1, 0, Math.PI * 2, false);
                 ctx.fill();
                 ctx.fillStyle = "yellow";
                 ctx.beginPath();
-                ctx.arc(ship.x, ship.y, ship.r * 0.9, 0, Math.PI * 2, false);
+                ctx.arc(ship.x, ship.y, ship.r * 0.8, 0, Math.PI * 2, false);
                 ctx.fill();
                 ctx.fillStyle = "white";
                 ctx.beginPath();
-                ctx.arc(ship.x, ship.y, ship.r * 0.6, 0, Math.PI * 2, false);
+                ctx.arc(ship.x, ship.y, ship.r * 0.5, 0, Math.PI * 2, false);
                 ctx.fill();
 
             }
