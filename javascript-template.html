@@ -22,6 +22,8 @@
         const ROIDS_JAG = 0.4; // jaggedness of the asteroids (0 = none, 1 = lots)
         const SHOW_BOUNDING = false; // show or hide collision bounding
         const SHIP_EXPLODE_DUR = 0.3; // duration of the ship's explosion
+        const SHIP_INV_DUR = 3; // duration of the ship's invisibility in seconds 
+        const SHIP_BLINK_DUR = 0.1; // duration of the ship's blink during invisibility in seconds
 
 
         /** @type {HTMLCanvasElement} */
@@ -114,6 +116,8 @@
                 x: canv.width / 2,
                 y: canv.height / 2,
                 a: 90 / 180 * Math.PI, // convert to radians
+                blinkTime: Math.ceil(SHIP_BLINK_DUR * FPS),
+                blinkNum: Math.ceil(SHIP_INV_DUR / SHIP_BLINK_DUR),
                 r: SHIP_SIZE / 2,
                 rot: 0,
                 thrusting: false,
@@ -126,8 +130,8 @@
         }
 
         function update() {
+            var blinkOn = ship.blinkNum % 2 == 0;
             var exploding = ship.explodTime > 0;
-
 
             // draw space
             ctx.fillStyle = "black";
@@ -167,29 +171,36 @@
 
             // draw a triangular ship
             if (!exploding) {
-                ctx.strokeStyle = "white";
-                ctx.lineWidth = SHIP_SIZE / 20;
-                ctx.beginPath();
-                ctx.moveTo( //nose of the ship
-                    ship.x + 4 / 3 * ship.r * Math.cos(ship.a),
-                    ship.y - 4 / 3 * ship.r * Math.sin(ship.a),
-                );
-                ctx.lineTo( //rear let of the ship
-                    ship.x - ship.r * (2 / 3 * Math.cos(ship.a) + Math.sin(ship.a)),
-                    ship.y + ship.r * (2 / 3 * Math.sin(ship.a) - Math.cos(ship.a))
-                );
-                ctx.lineTo( //rear right of the ship
-                    ship.x - ship.r * (2 / 3 * Math.cos(ship.a) - Math.sin(ship.a)),
-                    ship.y + ship.r * (2 / 3 * Math.sin(ship.a) + Math.cos(ship.a))
-                );
-                ctx.closePath()
-                ctx.stroke();
-
-                if (SHOW_BOUNDING) {
-                    ctx.strokeStyle = "lime";
+                if (blinkOn) {
+                    ctx.strokeStyle = "white";
+                    ctx.lineWidth = SHIP_SIZE / 20;
                     ctx.beginPath();
-                    ctx.arc(ship.x, ship.y, ship.r, 0, Math.PI * 2, false);
+                    ctx.moveTo( //nose of the ship
+                        ship.x + 4 / 3 * ship.r * Math.cos(ship.a),
+                        ship.y - 4 / 3 * ship.r * Math.sin(ship.a),
+                    );
+                    ctx.lineTo( //rear let of the ship
+                        ship.x - ship.r * (2 / 3 * Math.cos(ship.a) + Math.sin(ship.a)),
+                        ship.y + ship.r * (2 / 3 * Math.sin(ship.a) - Math.cos(ship.a))
+                    );
+                    ctx.lineTo( //rear right of the ship
+                        ship.x - ship.r * (2 / 3 * Math.cos(ship.a) - Math.sin(ship.a)),
+                        ship.y + ship.r * (2 / 3 * Math.sin(ship.a) + Math.cos(ship.a))
+                    );
+                    ctx.closePath()
                     ctx.stroke();
+                }
+
+                // handle blinking
+                if (ship.blinkNum > 0) {
+                    // reduce the blink time
+                    ship.blinkTime--;
+
+                    // reduce the blink num
+                    if (ship.blinkTime == 0) {
+                        ship.blinkTime = Math.ceil(SHIP_BLINK_DUR * FPS);
+                        ship.blinkNum--;
+                    }
                 }
             } else {
                 // draw the explosion
