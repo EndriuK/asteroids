@@ -85,7 +85,7 @@
             // check high score
             if (score > scoreHigh) {
                 scoreHigh = score;
-
+                localStorage.setItem(SAVE_KEY_SCORE, scoreHigh);
             }
 
             // destroy the asteroid
@@ -202,7 +202,15 @@
             level = 0;
             lives = GAME_LIVES;
             score = 0;
-            scoreHigh = localStorage.getItem("highscore") || 0;
+
+            // get the high score from local storage
+            var scoreStr = localStorage.getItem(SAVE_KEY_SCORE);
+            if (scoreStr == null) {
+                scoreHigh = 0;
+            } else {
+                scoreHigh = parseInt(scoreStr);
+            }
+
             ship = newShip();
             newLevel();
         }
